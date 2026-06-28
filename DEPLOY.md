@@ -64,14 +64,17 @@ connection details as variables (`PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`,
 - **Settings -> Root Directory**: `frontend`
 - **Settings -> Networking -> Generate Domain** -> this is the URL you'll give
   your friends, e.g. `tdf-poule.up.railway.app`.
-- **Variables -> Build-time variables** (Railway calls these "Build Args" or
-  you set them as normal variables and reference them under Build in
-  settings -- look for "Build Variables"), add:
+- **Variables** tab -> add a normal variable:
   ```
   VITE_API_BASE=https://<your-backend-domain-from-step-4>
   ```
-  This has to be the backend's *public* domain (the one a browser can reach),
-  not an internal Railway hostname -- Vite bakes it into the JS at build time.
+  There's no separate "build-time variables" section to find -- for
+  Dockerfile-based services, Railway just looks for an `ARG` in the Dockerfile
+  matching a variable name (our `frontend/Dockerfile` already declares
+  `ARG VITE_API_BASE`) and passes it in as a build arg automatically. This
+  has to be the backend's *public* domain (the one a browser can reach), not
+  an internal Railway hostname -- Vite bakes it into the JS at build time, so
+  redeploy after changing it.
 
 No `PORT` variable needs setting here -- the Dockerfile's nginx template reads
 Railway's auto-injected `PORT` automatically (see `frontend/nginx.conf.template`).
