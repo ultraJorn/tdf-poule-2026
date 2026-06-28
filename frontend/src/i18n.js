@@ -148,7 +148,6 @@ export const I18N = {
     result_word: "Result",
     back_to_stages: "← All stages",
     profile_caption: "Schematic road profile — illustrative shape based on stage type, distance, and total climbing (not surveyed elevation).",
-    profile_caption_real: "Real elevation profile from the official 2026 route GPX, scaled consistently across all stages so flat days look flat and mountain days look like mountains.",
     stages_source_note: "Stage profiles and favorites are pre-race previews (touretappe.nl, pouletips.nl), provisional until the final startlist — they're context for picking your team, not guaranteed outcomes."
   },
   nl: {
@@ -293,7 +292,6 @@ export const I18N = {
     result_word: "Uitslag",
     back_to_stages: "← Alle etappes",
     profile_caption: "Schematisch hoogteprofiel — illustratieve vorm op basis van etappetype, afstand en totaal hoogtemeters (geen ingemeten hoogtedata).",
-    profile_caption_real: "Echt hoogteprofiel uit de officiële GPX-route van 2026, consistent geschaald over alle etappes zodat vlakke dagen vlak ogen en bergetappes er ook echt als bergen uitzien.",
     stages_source_note: "Etappeprofielen en favorieten zijn voorbeschouwingen (touretappe.nl, pouletips.nl), voorlopig tot de definitieve startlijst — het is context om je team mee samen te stellen, geen garantie."
   }
 };

@@ -10,13 +10,18 @@
         <span v-if="detailStage.locked" class="tp-pill green">{{ t("scored_pill") }}</span>
         <span v-else class="tp-pill muted">{{ t("pending_pill") }}</span>
       </div>
-      <div v-if="detailStage.km" style="display:flex; gap:24px; margin-top:14px;">
-        <div><div class="tp-note">{{ t("th_distance") }}</div><div class="display" style="font-size:22px;">{{ detailStage.km }}<span style="font-size:13px; color:var(--text-muted);"> km</span></div></div>
-        <div><div class="tp-note">{{ t("th_climbing") }}</div><div class="display" style="font-size:22px;">{{ detailStage.elev }}<span style="font-size:13px; color:var(--text-muted);"> m</span></div></div>
-      </div>
-      <div style="margin-top:16px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px;">
-        <div v-html="profileSvgMarkup(detailStage)"></div>
-        <div class="tp-note" style="text-align:center; margin-top:4px;">{{ t(hasRealProfile(detailStage) ? "profile_caption_real" : "profile_caption") }}</div>
+      <div style="margin-top:16px;">
+        <StageProfileChart v-if="hasRealProfile(detailStage)" :stage="detailStage" />
+        <template v-else>
+          <div v-if="detailStage.km" style="display:flex; gap:24px; margin-bottom:10px;">
+            <div><div class="tp-note">{{ t("th_distance") }}</div><div class="display" style="font-size:22px;">{{ detailStage.km }}<span style="font-size:13px; color:var(--text-muted);"> km</span></div></div>
+            <div><div class="tp-note">{{ t("th_climbing") }}</div><div class="display" style="font-size:22px;">{{ detailStage.elev }}<span style="font-size:13px; color:var(--text-muted);"> m</span></div></div>
+          </div>
+          <div style="background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px;">
+            <div v-html="profileSvgMarkup(detailStage)"></div>
+            <div class="tp-note" style="text-align:center; margin-top:4px;">{{ t("profile_caption") }}</div>
+          </div>
+        </template>
       </div>
       <p v-if="note(detailStage)" style="margin-top:16px; font-size:14px; line-height:1.5;">{{ note(detailStage) }}</p>
       <div v-if="detailStage.favorites?.length" style="margin-top:14px;">
@@ -52,6 +57,7 @@ import { ref } from "vue";
 import { usePouleStore } from "../../stores/poule";
 import { useI18n } from "../../i18n";
 import { profileSvgMarkup, hasRealProfile } from "../../utils/stageProfile";
+import StageProfileChart from "./StageProfileChart.vue";
 
 const store = usePouleStore();
 const { t, lang, stageTagLabel } = useI18n();
