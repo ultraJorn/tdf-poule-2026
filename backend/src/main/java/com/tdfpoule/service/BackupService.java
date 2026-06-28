@@ -102,6 +102,9 @@ public class BackupService {
             s.setNoteEn(sd.note() != null ? sd.note().en() : null);
             s.setNoteNl(sd.note() != null ? sd.note().nl() : null);
             s.setFavorites(sd.favorites() != null ? sd.favorites() : List.of());
+            s.setElevationProfile(sd.elevationProfile() != null
+                    ? sd.elevationProfile().stream().map(p -> new ElevationPoint(p.km(), p.elev())).collect(Collectors.toList())
+                    : List.of());
             s.setLocked(sd.locked());
             s.setTopRiderIds(sd.top() != null ? sd.top() : List.of());
             s.setGcRiderIds(sd.gc() != null ? sd.gc() : List.of());

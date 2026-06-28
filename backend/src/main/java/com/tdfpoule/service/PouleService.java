@@ -29,16 +29,18 @@ public class PouleService {
     private final StageRepository stageRepository;
     private final PlayerTeamRepository playerTeamRepository;
     private final SeedDataService seedDataService;
+    private final GpxRouteParser gpxRouteParser;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public PouleService(PouleRepository pouleRepository, RiderRepository riderRepository,
                          StageRepository stageRepository, PlayerTeamRepository playerTeamRepository,
-                         SeedDataService seedDataService) {
+                         SeedDataService seedDataService, GpxRouteParser gpxRouteParser) {
         this.pouleRepository = pouleRepository;
         this.riderRepository = riderRepository;
         this.stageRepository = stageRepository;
         this.playerTeamRepository = playerTeamRepository;
         this.seedDataService = seedDataService;
+        this.gpxRouteParser = gpxRouteParser;
     }
 
     @Transactional
@@ -83,6 +85,7 @@ public class PouleService {
             s.setNoteEn(ss.noteEn());
             s.setNoteNl(ss.noteNl());
             s.setFavorites(ss.favorites() != null ? ss.favorites() : List.of());
+            gpxRouteParser.applyToStage(s);
             stages.add(s);
         }
         stageRepository.saveAll(stages);

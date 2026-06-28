@@ -16,7 +16,7 @@
       </div>
       <div style="margin-top:16px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px;">
         <div v-html="profileSvgMarkup(detailStage)"></div>
-        <div class="tp-note" style="text-align:center; margin-top:4px;">{{ t("profile_caption") }}</div>
+        <div class="tp-note" style="text-align:center; margin-top:4px;">{{ t(hasRealProfile(detailStage) ? "profile_caption_real" : "profile_caption") }}</div>
       </div>
       <p v-if="note(detailStage)" style="margin-top:16px; font-size:14px; line-height:1.5;">{{ note(detailStage) }}</p>
       <div v-if="detailStage.favorites?.length" style="margin-top:14px;">
@@ -51,7 +51,7 @@
 import { ref } from "vue";
 import { usePouleStore } from "../../stores/poule";
 import { useI18n } from "../../i18n";
-import { profileSvgMarkup } from "../../utils/stageProfile";
+import { profileSvgMarkup, hasRealProfile } from "../../utils/stageProfile";
 
 const store = usePouleStore();
 const { t, lang, stageTagLabel } = useI18n();

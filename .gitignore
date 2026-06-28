@@ -4,3 +4,7 @@
 .DS_Store
 .idea/
 *.iml
+
+# Raw GPX dump -- the canonical copy used by the app lives in
+# backend/src/main/resources/gpx/ (normalized filenames, actually bundled into the build).
+/stages/

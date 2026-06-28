@@ -42,6 +42,11 @@ public class Stage {
     @Column(nullable = false, columnDefinition = "jsonb")
     private List<String> favorites = new ArrayList<>();
 
+    /** Downsampled distance/elevation profile parsed from this stage's GPX file (empty if none). */
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "elevation_profile", nullable = false, columnDefinition = "jsonb")
+    private List<ElevationPoint> elevationProfile = new ArrayList<>();
+
     @Column(nullable = false)
     private boolean locked = false;
 
@@ -94,6 +99,9 @@ public class Stage {
 
     public List<String> getFavorites() { return favorites; }
     public void setFavorites(List<String> favorites) { this.favorites = favorites; }
+
+    public List<ElevationPoint> getElevationProfile() { return elevationProfile; }
+    public void setElevationProfile(List<ElevationPoint> elevationProfile) { this.elevationProfile = elevationProfile; }
 
     public boolean isLocked() { return locked; }
     public void setLocked(boolean locked) { this.locked = locked; }

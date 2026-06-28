@@ -63,9 +63,36 @@ function profileShape(stage) {
   return pts;
 }
 
+// Real GPX-derived elevation profiles aren't normalized per-stage -- a flat stage and a high
+// mountain stage are scaled against the SAME reference relief, so flat stages genuinely render
+// flat and mountains render dramatic, rather than every stage being stretched to fill the same
+// chart height regardless of how much actual climbing it has. REFERENCE_RELIEF_M is set just
+// above the biggest elevation range across the 2026 route's real GPX files (stage 20, ~2092m).
+const REFERENCE_RELIEF_M = 2200;
+const MIN_DISPLAY_FRACTION = 0.08; // even pancake-flat stages still show a thin visible line
+const CHART_LOW = 0.06, CHART_HIGH = 0.94;
+
+function realProfilePoints(stage) {
+  const profile = stage.elevationProfile;
+  const totalKm = profile[profile.length - 1].km || 1;
+  const elevs = profile.map((p) => p.elev);
+  const elevMin = Math.min(...elevs), elevMax = Math.max(...elevs);
+  const actualRange = Math.max(1, elevMax - elevMin);
+  const displayFraction = Math.max(actualRange / REFERENCE_RELIEF_M, MIN_DISPLAY_FRACTION);
+  const displayRange = displayFraction * (CHART_HIGH - CHART_LOW);
+  return profile.map((p) => ({
+    x: p.km / totalKm,
+    y: CHART_LOW + ((p.elev - elevMin) / actualRange) * displayRange
+  }));
+}
+
+export function hasRealProfile(stage) {
+  return Array.isArray(stage.elevationProfile) && stage.elevationProfile.length >= 2;
+}
+
 export function profileSvgMarkup(stage) {
   const W = 600, H = 150, padL = 8, padR = 8, padB = 22, padT = 10;
-  const pts = profileShape(stage);
+  const pts = hasRealProfile(stage) ? realProfilePoints(stage) : profileShape(stage);
   const innerW = W - padL - padR, innerH = H - padT - padB;
   const X = (x) => padL + x * innerW;
   const Y = (y) => padT + (1 - y) * innerH;
