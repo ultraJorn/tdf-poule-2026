@@ -1,5 +1,8 @@
 server {
-    listen 80;
+    # ${PORT} is substituted at container start (see Dockerfile) -- defaults to 80 for local
+    # docker-compose, but lets platforms like Railway that assign a dynamic port per service
+    # just work without any manual "set the target port" step in their dashboard.
+    listen ${PORT};
     server_name _;
     root /usr/share/nginx/html;
     index index.html;

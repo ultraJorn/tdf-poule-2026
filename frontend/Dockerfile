@@ -20,6 +20,12 @@ RUN npm run build
 
 FROM nginx:1.27-alpine
 COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# The official nginx image runs envsubst on every *.template here into /etc/nginx/conf.d/
+# at container start, so ${PORT} in nginx.conf.template gets resolved to whatever port the
+# host platform assigns -- no code change needed to deploy on a platform like Railway that
+# picks the port for you, and it still defaults to 80 for plain `docker compose up`.
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
+ENV PORT=80
 
 EXPOSE 80
