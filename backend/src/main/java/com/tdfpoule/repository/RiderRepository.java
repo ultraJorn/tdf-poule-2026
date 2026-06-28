@@ -8,4 +8,5 @@ import java.util.List;
 public interface RiderRepository extends JpaRepository<Rider, String> {
     List<Rider> findByPouleIdOrderByPriceDescNameAsc(String pouleId);
     void deleteByPouleId(String pouleId);
+    long countByPouleId(String pouleId);
 }

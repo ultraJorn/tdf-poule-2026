@@ -126,7 +126,20 @@ public class PouleService {
     @Transactional
     public void delete(String code, String adminPassword) {
         assertAdmin(code, adminPassword);
-        String id = normalizeCode(code);
+        deleteInternal(normalizeCode(code));
+    }
+
+    /** Used only by SiteAdminService, which checks its own site-wide secret instead. */
+    @Transactional
+    public void deleteAsSiteAdmin(String code) {
+        deleteInternal(normalizeCode(code));
+    }
+
+    public List<Poule> listAll() {
+        return pouleRepository.findAll();
+    }
+
+    private void deleteInternal(String id) {
         playerTeamRepository.deleteAll(playerTeamRepository.findByPouleId(id));
         riderRepository.deleteByPouleId(id);
         stageRepository.deleteAll(stageRepository.findByPouleIdOrderByStageNumberAsc(id));

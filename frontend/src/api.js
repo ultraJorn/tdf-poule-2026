@@ -3,9 +3,10 @@
 
 const BASE = import.meta.env.VITE_API_BASE || "http://localhost:8080";
 
-async function request(path, { method = "GET", body, adminPassword } = {}) {
+async function request(path, { method = "GET", body, adminPassword, siteAdminSecret } = {}) {
   const headers = { "Content-Type": "application/json" };
   if (adminPassword) headers["X-Admin-Password"] = adminPassword;
+  if (siteAdminSecret) headers["X-Site-Admin-Secret"] = siteAdminSecret;
 
   let res;
   try {
@@ -65,5 +66,11 @@ export const api = {
   exportBackup: (code, adminPassword) =>
     request(`/api/poules/${encodeURIComponent(code)}/backup`, { adminPassword }),
   restoreBackup: (data, newAdminPassword) =>
-    request(`/api/restore`, { method: "POST", body: { data, newAdminPassword } })
+    request(`/api/restore`, { method: "POST", body: { data, newAdminPassword } }),
+
+  // Site-wide admin: every poule on this deployment, gated by a single shared secret
+  // (SITE_ADMIN_SECRET on the backend) rather than each poule's own organizer passphrase.
+  listAllPoules: (secret) => request(`/api/admin/poules`, { siteAdminSecret: secret }),
+  deletePouleAsSiteAdmin: (code, secret) =>
+    request(`/api/admin/poules/${encodeURIComponent(code)}`, { method: "DELETE", siteAdminSecret: secret })
 };

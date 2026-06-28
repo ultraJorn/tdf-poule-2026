@@ -4,6 +4,7 @@ import CreateView from "./views/CreateView.vue";
 import JoinView from "./views/JoinView.vue";
 import BuildTeamView from "./views/BuildTeamView.vue";
 import DashboardView from "./views/DashboardView.vue";
+import SiteAdminView from "./views/SiteAdminView.vue";
 import { usePouleStore } from "./stores/poule";
 
 const router = createRouter({
@@ -13,7 +14,10 @@ const router = createRouter({
     { path: "/create", name: "create", component: CreateView },
     { path: "/join", name: "join", component: JoinView },
     { path: "/poule/:code/team", name: "build-team", component: BuildTeamView },
-    { path: "/poule/:code", name: "dashboard", component: DashboardView }
+    { path: "/poule/:code", name: "dashboard", component: DashboardView },
+    // Not linked from anywhere in the normal UI -- gated by its own SITE_ADMIN_SECRET
+    // check on the backend, not by anything in this router.
+    { path: "/site-admin", name: "site-admin", component: SiteAdminView }
   ]
 });
 

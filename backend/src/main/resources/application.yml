@@ -32,6 +32,10 @@ spring:
 app:
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:4173}
+  # A single shared secret for the hidden /site-admin page (list/delete ANY poule,
+  # bypassing each poule's own organizer passphrase). Leave unset to disable it entirely --
+  # see SiteAdminService.
+  site-admin-secret: ${SITE_ADMIN_SECRET:}
 
 logging:
   level:
