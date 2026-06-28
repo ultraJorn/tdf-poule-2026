@@ -1,0 +1,128 @@
+[
+  {
+    "number": 1, "label": "Barcelona → Barcelona", "tag": "TTT", "km": 19, "elev": 220,
+    "noteEn": "Team time trial with two short, punchy climbs late in Barcelona (Montjuïc) — the strongest all-round squads take the first yellow jersey.",
+    "noteNl": "Ploegentijdrit met twee korte, pittige klimmetjes laat in Barcelona (Montjuïc) — de sterkste complete ploegen pakken de eerste gele trui.",
+    "favorites": ["UAE Team Emirates - XRG", "Team Visma | Lease a Bike", "Netcompany INEOS", "Red Bull - BORA - hansgrohe"]
+  },
+  {
+    "number": 2, "label": "Tarragona → Barcelona", "tag": "Hilly", "km": 169, "elev": 2049,
+    "noteEn": "Another hilly finish in Barcelona, similar to stage 1's finale — good terrain for puncheurs and classics riders who can punch over a short climb.",
+    "noteNl": "Opnieuw een heuvelachtige finale in Barcelona, vergelijkbaar met etappe 1 — goed terrein voor puncheurs en klassieke renners die over een korte klim kunnen versnellen.",
+    "favorites": ["Mathieu van der Poel (Alpecin - Premier Tech)", "Mads Pedersen (Lidl - Trek)", "Michał Kwiatkowski (Netcompany INEOS)"]
+  },
+  {
+    "number": 3, "label": "Granollers → Les Angles", "tag": "Mountain", "km": 196, "elev": 3906,
+    "noteEn": "First true mountain stage and first summit finish — long Pyrenean climbs soften everyone's legs before the GC favorites fight it out at Les Angles.",
+    "noteNl": "Eerste echte bergrit en eerste bergaankomst — lange Pyreneeënklimmen vermoeien iedereen voor de favorieten strijden bij Les Angles.",
+    "favorites": ["Tadej Pogačar (UAE Team Emirates - XRG)", "Adam Yates (UAE Team Emirates - XRG)", "Jonas Vingegaard (Team Visma | Lease a Bike)", "Remco Evenepoel (Red Bull - BORA - hansgrohe)"]
+  },
+  {
+    "number": 4, "label": "Carcassonne → Foix", "tag": "Hilly", "km": 182, "elev": 2784,
+    "noteEn": "Rolling terrain that flattens out before the finish — usually a reduced bunch sprint or a late breakaway, rarely decisive for GC.",
+    "noteNl": "Golvend terrein dat afvlakt voor de finish — meestal een verkleinde spurt of een late ontsnapping, zelden beslissend voor het klassement.",
+    "favorites": ["Mathieu van der Poel (Alpecin - Premier Tech)", "Mads Pedersen (Lidl - Trek)", "breakaway specialists"]
+  },
+  {
+    "number": 5, "label": "Lannemezan → Pau", "tag": "Flat", "km": 158, "elev": 1395,
+    "noteEn": "Flat transition stage out of the Pyrenees — a pure sprinters' day.",
+    "noteNl": "Vlakke overgangsetappe uit de Pyreneeën — een dag voor de snelle mannen.",
+    "favorites": ["Jasper Philipsen (Alpecin - Premier Tech)", "Tim Merlier (Soudal Quick-Step)", "Olav Kooij (Decathlon CMA CGM)", "Biniam Girmay (NSN Cycling Team)"]
+  },
+  {
+    "number": 6, "label": "Pau → Gavarnie-Gèdre", "tag": "Mountain", "km": 186, "elev": 4149,
+    "noteEn": "One of the toughest Pyrenean stages, finishing below the legendary Cirque de Gavarnie — a real GC battleground.",
+    "noteNl": "Een van de zwaarste Pyreneeënritten, finish onder de legendarische Cirque de Gavarnie — een echt klassementsgevecht.",
+    "favorites": ["Tadej Pogačar (UAE Team Emirates - XRG)", "Jonas Vingegaard (Team Visma | Lease a Bike)", "Remco Evenepoel (Red Bull - BORA - hansgrohe)", "Florian Lipowitz (Red Bull - BORA - hansgrohe)"]
+  },
+  {
+    "number": 7, "label": "Hagetmau → Bordeaux", "tag": "Flat", "km": 175, "elev": 701,
+    "noteEn": "Flat run into Bordeaux, made for the fast men.",
+    "noteNl": "Vlakke rit naar Bordeaux, gemaakt voor de snelle mannen.",
+    "favorites": ["Tim Merlier (Soudal Quick-Step)", "Jasper Philipsen (Alpecin - Premier Tech)", "Olav Kooij (Decathlon CMA CGM)"]
+  },
+  {
+    "number": 8, "label": "Périgueux → Bergerac", "tag": "Flat", "km": 180, "elev": 1353,
+    "noteEn": "Another flat Dordogne stage — expect the same sprinters to go again.",
+    "noteNl": "Weer een vlakke etappe door de Dordogne — verwacht dezelfde snelle mannen.",
+    "favorites": ["Tim Merlier (Soudal Quick-Step)", "Jasper Philipsen (Alpecin - Premier Tech)", "Olav Kooij (Decathlon CMA CGM)"]
+  },
+  {
+    "number": 9, "label": "Malemort → Ussel", "tag": "Hilly", "km": 185, "elev": 3244,
+    "noteEn": "Constant up-and-down terrain that never gets truly hard — classic breakaway-hunting ground for attacking riders.",
+    "noteNl": "Constant op-en-af terrein dat nooit echt zwaar wordt — klassiek jachtterrein voor de vroege vlucht.",
+    "favorites": ["Ion Izagirre (Cofidis)", "Luke Plapp (Team Jayco AlUla)", "Dorian Godon (Netcompany INEOS)"]
+  },
+  {
+    "number": 10, "label": "Aurillac → Le Lioran", "tag": "Hilly", "km": 167, "elev": 3791,
+    "noteEn": "First stage after the rest day, a treacherous medium-mountain test through the Cantal — good for climbers and late attackers.",
+    "noteNl": "Eerste etappe na de rustdag, een verraderlijke middelgebergterit door de Cantal — goed voor klimmers en late aanvallers.",
+    "favorites": ["Richard Carapaz (EF Education - EasyPost)", "Tom Pidcock (Pinarello Q36.5)", "Ben Healy (EF Education - EasyPost)"]
+  },
+  {
+    "number": 11, "label": "Vichy → Nevers", "tag": "Flat", "km": 161, "elev": 1107,
+    "noteEn": "Flat stage, sprinters' day.",
+    "noteNl": "Vlakke etappe, dag voor de sprinters.",
+    "favorites": ["Tim Merlier (Soudal Quick-Step)", "Jasper Philipsen (Alpecin - Premier Tech)", "Olav Kooij (Decathlon CMA CGM)"]
+  },
+  {
+    "number": 12, "label": "Nevers Magny-Cours → Chalon-sur-Saône", "tag": "Flat", "km": 181, "elev": 1555,
+    "noteEn": "Another flat one — sprinters again.",
+    "noteNl": "Weer een vlakke rit — opnieuw de sprinters.",
+    "favorites": ["Tim Merlier (Soudal Quick-Step)", "Jasper Philipsen (Alpecin - Premier Tech)", "Olav Kooij (Decathlon CMA CGM)"]
+  },
+  {
+    "number": 13, "label": "Dole → Belfort", "tag": "Hilly", "km": 205, "elev": 2373,
+    "noteEn": "Long stage over the Ballon d'Alsace, cresting 30km from the line — too hard for pure sprinters, too easy for the GC men, perfect for puncheurs and breakaway riders.",
+    "noteNl": "Lange etappe over de Ballon d'Alsace, getopt op 30km van de streep — te zwaar voor de sprinters, te licht voor de klassementsmannen, perfect voor puncheurs en vluchters.",
+    "favorites": ["Ion Izagirre (Cofidis)", "Tom Pidcock (Pinarello Q36.5)", "Ivan Romeo (Movistar Team)"]
+  },
+  {
+    "number": 14, "label": "Mulhouse → Le Markstein", "tag": "Mountain", "km": 155, "elev": 4602,
+    "noteEn": "First big Vosges mountain stage — short but brutally steep, ideal for pure climbers.",
+    "noteNl": "Eerste grote bergrit door de Vogezen — kort maar bikkelhard steil, ideaal voor pure klimmers.",
+    "favorites": ["Tadej Pogačar (UAE Team Emirates - XRG)", "Jonas Vingegaard (Team Visma | Lease a Bike)", "Remco Evenepoel (Red Bull - BORA - hansgrohe)"]
+  },
+  {
+    "number": 15, "label": "Champagnole → Plateau de Solaison", "tag": "Mountain", "km": 184, "elev": 4701,
+    "noteEn": "Another tough summit finish before the final rest day — a big GC day.",
+    "noteNl": "Weer een zware bergaankomst voor de laatste rustdag — een grote klassementsdag.",
+    "favorites": ["Tadej Pogačar (UAE Team Emirates - XRG)", "Jonas Vingegaard (Team Visma | Lease a Bike)", "Florian Lipowitz (Red Bull - BORA - hansgrohe)"]
+  },
+  {
+    "number": 16, "label": "Évian-les-Bains → Thonon-les-Bains", "tag": "ITT", "km": 26, "elev": 465,
+    "noteEn": "Individual time trial with a slightly uphill profile — a chance for GC riders to gain real time against the clock.",
+    "noteNl": "Individuele tijdrit met een licht stijgend profiel — een kans voor klassementsrenners om echt tijd te pakken tegen de klok.",
+    "favorites": ["Filippo Ganna (Netcompany INEOS)", "Remco Evenepoel (Red Bull - BORA - hansgrohe)", "Michał Kwiatkowski (Netcompany INEOS)"]
+  },
+  {
+    "number": 17, "label": "Chambéry → Voiron", "tag": "Hilly", "km": 175, "elev": 2361,
+    "noteEn": "Rolling terrain with a slight uphill drag to the line — favors puncheurs and GC favorites over the sprinters.",
+    "noteNl": "Golvend terrein met een licht stijgende aanloop naar de streep — in het voordeel van puncheurs en klassementsfavorieten, niet van de sprinters.",
+    "favorites": ["Remco Evenepoel (Red Bull - BORA - hansgrohe)", "Tadej Pogačar (UAE Team Emirates - XRG)", "Jonas Vingegaard (Team Visma | Lease a Bike)"]
+  },
+  {
+    "number": 18, "label": "Voiron → Orcières-Merlette", "tag": "Mountain", "km": 185, "elev": 3950,
+    "noteEn": "A shorter, sharp summit finish (7.1km at 6.7%) that suits explosive climbers and attacking riders as much as pure GC men.",
+    "noteNl": "Een kortere, pittige bergaankomst (7,1km aan 6,7%) die zowel explosieve klimmers en aanvallers als de pure klassementsmannen kansen geeft.",
+    "favorites": ["Mathieu van der Poel (Alpecin - Premier Tech)", "Filippo Ganna (Netcompany INEOS)", "Tadej Pogačar (UAE Team Emirates - XRG)"]
+  },
+  {
+    "number": 19, "label": "Gap → Alpe d'Huez", "tag": "Mountain", "km": 128, "elev": 3605,
+    "noteEn": "First of back-to-back Alpe d'Huez finishes — a shorter stage, but the legendary climb still decides plenty.",
+    "noteNl": "Eerste van twee aankomsten op Alpe d'Huez op rij — een kortere etappe, maar de legendarische klim beslist nog steeds veel.",
+    "favorites": ["Tadej Pogačar (UAE Team Emirates - XRG)", "Jonas Vingegaard (Team Visma | Lease a Bike)", "Remco Evenepoel (Red Bull - BORA - hansgrohe)"]
+  },
+  {
+    "number": 20, "label": "Le Bourg-d'Oisans → Alpe d'Huez", "tag": "Mountain", "km": 171, "elev": 5601,
+    "noteEn": "The queen stage: Croix de Fer, Télégraphe and Galibier before a second Alpe d'Huez finish via the technical Col de Sarenne — this is where the Tour gets decided.",
+    "noteNl": "De koningsrit: Croix de Fer, Télégraphe en Galibier voor een tweede aankomst op Alpe d'Huez via de technische Col de Sarenne — hier wordt de Tour beslist.",
+    "favorites": ["Mikel Landa (Soudal Quick-Step)", "Ion Izagirre (Cofidis)", "Remco Evenepoel (Red Bull - BORA - hansgrohe)", "Richard Carapaz (EF Education - EasyPost)"]
+  },
+  {
+    "number": 21, "label": "Thoiry → Paris", "tag": "Flat", "km": 130, "elev": 1978,
+    "noteEn": "Traditional ceremonial-into-sprint finale into Paris — a last chance for the fast men and a green jersey shootout.",
+    "noteNl": "Traditionele ceremoniële finale die uitloopt op een spurt in Parijs — laatste kans voor de snelle mannen en een ontknoping in het puntenklassement.",
+    "favorites": ["Jasper Philipsen (Alpecin - Premier Tech)", "Tim Merlier (Soudal Quick-Step)", "Mads Pedersen (Lidl - Trek)"]
+  }
+]

@@ -1,0 +1,6 @@
+# Root-level ignores; backend/ and frontend/ have their own more specific .gitignore too.
+.env
+*.log
+.DS_Store
+.idea/
+*.iml

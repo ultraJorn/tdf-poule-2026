@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: tdf-poule-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-tdf_poule}
+      POSTGRES_USER: ${DB_USER:-tdf_poule}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-tdf_poule}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - tdf-poule-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-tdf_poule} -d ${DB_NAME:-tdf_poule}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: tdf-poule-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # service name "postgres" resolves on the docker-compose network -- only the
+      # frontend (running in the browser, outside this network) needs localhost:DB_PORT.
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-tdf_poule}
+      DB_USER: ${DB_USER:-tdf_poule}
+      DB_PASSWORD: ${DB_PASSWORD:-tdf_poule}
+      SERVER_PORT: 8080
+      CORS_ALLOWED_ORIGINS: http://localhost:${FRONTEND_PORT:-8081}
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # baked into the built JS at image-build time -- this is what the *browser* calls,
+        # so it has to be the backend's published host port, not the internal service name.
+        VITE_API_BASE: http://localhost:${BACKEND_PORT:-8080}
+    container_name: tdf-poule-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-8081}:80"
+
+volumes:
+  tdf-poule-pgdata:
