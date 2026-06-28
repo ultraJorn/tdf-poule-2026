@@ -19,7 +19,13 @@
   --blue: #5B9BD9;
   --radius: 12px;
   font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg);
+  /* Dark overlay layered over the photo so it reads as a faint backdrop -- the gradient is
+     opaque enough that text/cards on top stay fully readable, the photo just tints the
+     empty space between them. */
+  background:
+    linear-gradient(rgba(20, 22, 26, 0.92), rgba(20, 22, 26, 0.92)),
+    url('./biking.jpg') center / cover no-repeat fixed,
+    var(--bg);
   color: var(--text);
   border-radius: 16px;
   overflow: hidden;
