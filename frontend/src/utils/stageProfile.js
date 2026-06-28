@@ -1,28 +1,64 @@
-// Ported verbatim from the original app's profileShape()/profileSVG(): a schematic road
-// profile shaped by stage type + total climbing, not surveyed elevation data.
+// Schematic road profile, shaped by each stage's *actual* km/elev (not surveyed elevation
+// data, but driven by it) plus a per-stage seed -- two stages sharing a tag used to render
+// pixel-identical because the old version only looked at stage.tag. Now the climb density
+// (m climbed per km) sets the overall amplitude/steepness, and a seeded pseudo-random wave
+// set means every stage looks distinct even within the same category.
+
+// Deterministic PRNG (mulberry32) so the same stage always renders the same shape across
+// reloads, without needing to store random points anywhere.
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// The overall trend line for a tag, before per-stage noise is layered on -- this is what
+// keeps "Mountain" stages reading as build-to-a-summit, "Flat" stages as flat, etc., while
+// `density` (climbing per km) stretches/steepens it per stage.
+function envelope(tag, x, density) {
+  if (tag === "Flat") return 0.15 + density * 0.012;
+  if (tag === "TTT" || tag === "ITT") {
+    const ramp = x > 0.6 ? (x - 0.6) / 0.4 : 0;
+    return 0.14 + density * 0.006 + ramp * (0.10 + density * 0.012);
+  }
+  if (tag === "Hilly") {
+    return 0.20 + Math.pow(x, 0.6) * (0.10 + density * 0.013);
+  }
+  // Mountain: climbs toward a summit finish, with a brief valley dip before the final ramp.
+  let y = 0.14 + Math.pow(x, 1.3) * (0.30 + density * 0.015);
+  if (x > 0.72) {
+    const f = (x - 0.72) / 0.28;
+    const dip = f < 0.15 ? -0.12 * (1 - f / 0.15) : 0;
+    const finalHeight = Math.min(0.95, 0.45 + density * 0.014);
+    const ramp = f < 0.15 ? 0 : ((f - 0.15) / 0.85) * finalHeight;
+    y = Math.max(y + dip, ramp);
+  }
+  return y;
+}
 
 function profileShape(stage) {
   const tag = stage.tag;
+  const density = stage.km ? (stage.elev || 0) / stage.km : 0; // metres climbed per km
+  const rng = mulberry32((stage.n || 1) * 97 + Math.round(density * 13) + 1);
+
+  const numWaves = tag === "Flat" ? 2 : tag === "Hilly" ? 3 : tag === "Mountain" ? 4 : 2;
+  const waves = Array.from({ length: numWaves }, () => ({
+    freq: 3 + rng() * 12,
+    phase: rng() * Math.PI * 2,
+    amp: (0.015 + rng() * 0.045) * (tag === "Flat" ? 0.7 : 1)
+  }));
+
+  const n = tag === "Mountain" ? 60 : tag === "Hilly" ? 50 : 42;
   const pts = [];
-  const push = (x, y) => pts.push({ x, y });
-  if (tag === "Flat") {
-    for (let i = 0; i <= 40; i++) { const x = i / 40; const y = 0.18 + 0.06 * Math.sin(x * 9) + 0.04 * Math.sin(x * 23); push(x, y); }
-  } else if (tag === "TTT" || tag === "ITT") {
-    for (let i = 0; i <= 40; i++) { const x = i / 40; let y = 0.15 + 0.05 * Math.sin(x * 7); if (x > 0.6) y += 0.25 * Math.max(0, Math.sin((x - 0.6) * Math.PI / 0.4)); push(x, y); }
-  } else if (tag === "Hilly") {
-    for (let i = 0; i <= 48; i++) { const x = i / 48; const base = 0.22 + 0.30 * Math.pow(x, 0.7); const roll = 0.16 * Math.abs(Math.sin(x * 7)); let y = base * 0.5 + roll + 0.10 * Math.sin(x * 15); push(x, Math.min(0.8, y)); }
-  } else {
-    for (let i = 0; i <= 52; i++) {
-      const x = i / 52;
-      let y = 0.15 + 0.62 * Math.pow(x, 1.4);
-      y += 0.10 * Math.sin(x * 8);
-      if (x > 0.72) {
-        const f = (x - 0.72) / 0.28;
-        const ramp = f < 0.18 ? (0.4 - f / 0.18 * 0.12) : (0.28 + (f - 0.18) / 0.82 * 0.68);
-        y = Math.max(y * 0.6, ramp);
-      }
-      push(x, Math.min(0.97, Math.max(0.12, y)));
-    }
+  for (let i = 0; i <= n; i++) {
+    const x = i / n;
+    let y = envelope(tag, x, density);
+    for (const w of waves) y += w.amp * Math.sin(x * w.freq + w.phase);
+    pts.push({ x, y: Math.min(0.97, Math.max(0.08, y)) });
   }
   return pts;
 }
