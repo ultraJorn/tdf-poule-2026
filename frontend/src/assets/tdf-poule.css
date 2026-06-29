@@ -179,9 +179,17 @@
 .tp-dot { width:9px; height:9px; border-radius:50%; display:inline-block; }
 .tp-dot.yellow{background:var(--yellow);} .tp-dot.green{background:var(--green);} .tp-dot.polka{background:var(--red);} .tp-dot.white{background:#fff;border:1px solid #999;}
 
+/* ---------- jersey holders (Results tab) ---------- */
+.tp-jersey-result-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.tp-jersey-result-card { background:var(--surface2); border:1px solid var(--border); border-radius:9px; padding:12px 10px; text-align:center; }
+.tp-jersey-result-img { width:100%; max-width:72px; height:72px; object-fit:contain; margin:0 auto 8px; display:block; }
+.tp-jersey-result-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; font-weight:700; margin-bottom:4px; }
+.tp-jersey-result-name { font-size:13.5px; font-weight:700; }
+
 @media (max-width: 640px) {
   .tp-place-grid { grid-template-columns:repeat(3,1fr); }
   .tp-jersey-grid { grid-template-columns:repeat(2,1fr); }
+  .tp-jersey-result-grid { grid-template-columns:repeat(2,1fr); }
   .tp-hero { padding:22px 18px 18px; }
   .tp-body { padding:18px 18px 26px; }
 }
