@@ -28,14 +28,17 @@ public class TeamService {
     private final StageRepository stageRepository;
     private final PouleService pouleService;
     private final ScoringService scoringService;
+    private final ScheduleService scheduleService;
 
     public TeamService(PlayerTeamRepository playerTeamRepository, RiderRepository riderRepository,
-                        StageRepository stageRepository, PouleService pouleService, ScoringService scoringService) {
+                        StageRepository stageRepository, PouleService pouleService, ScoringService scoringService,
+                        ScheduleService scheduleService) {
         this.playerTeamRepository = playerTeamRepository;
         this.riderRepository = riderRepository;
         this.stageRepository = stageRepository;
         this.pouleService = pouleService;
         this.scoringService = scoringService;
+        this.scheduleService = scheduleService;
     }
 
     public Optional<TeamDto> find(String code, String username) {
@@ -87,7 +90,8 @@ public class TeamService {
         PlayerTeam team = playerTeamRepository.findByPouleIdAndUsernameIgnoreCase(id, username)
                 .orElseThrow(() -> ApiException.notFound("No team found for " + username));
 
-        if (team.getSwapsUsed() >= poule.getTotalSwaps()) {
+        boolean freeSwap = scheduleService.isFreeSwapWindowActive();
+        if (!freeSwap && team.getSwapsUsed() >= poule.getTotalSwaps()) {
             throw ApiException.badRequest("No swaps left.");
         }
         List<String> currentRoster = scoringService.rosterAtStage(team.getRiderIds(), team.getSwapLog(), poule.getCurrentStage() + 1);
@@ -113,7 +117,9 @@ public class TeamService {
         }
 
         team.getSwapLog().add(new SwapLogEntry(req.outId(), req.inId(), poule.getCurrentStage() + 1, Instant.now().toEpochMilli()));
-        team.setSwapsUsed(team.getSwapsUsed() + 1);
+        if (!freeSwap) {
+            team.setSwapsUsed(team.getSwapsUsed() + 1);
+        }
         playerTeamRepository.save(team);
         return toDto(id, team);
     }

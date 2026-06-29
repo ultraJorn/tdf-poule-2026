@@ -37,12 +37,19 @@ export const usePouleStore = defineStore("poule", {
     backupCode: null,
     backupCopied: false,
 
+    schedule: null, // { stages, stage1Start, freeSwapWindowStart, freeSwapWindowActive }
+
     busy: false,
     error: null
   }),
 
   getters: {
-    ridersById: (state) => ridersIndex(state.riders)
+    ridersById: (state) => ridersIndex(state.riders),
+    scheduleByStage: (state) => {
+      const m = {};
+      (state.schedule?.stages || []).forEach((s) => { m[s.stage] = s; });
+      return m;
+    }
   },
 
   actions: {
@@ -146,6 +153,11 @@ export const usePouleStore = defineStore("poule", {
     async loadLeaderboard() {
       this.leaderboard = null;
       this.leaderboard = await api.leaderboard(this.code);
+    },
+
+    async loadSchedule() {
+      if (this.schedule) return; // same real-world schedule for every poule, fetch once
+      this.schedule = await api.getSchedule();
     },
 
     async refreshPoule() {

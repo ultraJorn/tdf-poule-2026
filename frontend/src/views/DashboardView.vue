@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { usePouleStore } from "../stores/poule";
 import { useI18n } from "../i18n";
@@ -109,4 +109,8 @@ function leave() {
   store.leavePoule();
   router.push("/");
 }
+
+onMounted(() => {
+  store.loadSchedule().catch(() => {}); // non-critical: just powers the free-swap banner + real stage dates
+});
 </script>

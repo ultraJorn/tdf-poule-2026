@@ -1,0 +1,211 @@
+{
+  "event": "Tour de France 2026",
+  "edition": 113,
+  "start_date": "2026-07-04",
+  "end_date": "2026-07-26",
+  "grand_depart": "Barcelona, Spain",
+  "finish": "Paris, Champs-Élysées",
+  "total_distance_km": 3333,
+  "total_stages": 21,
+  "timezone": "CEST (UTC+2)",
+  "notes": "Start times are in CEST. Most stage times follow the standard ASO patterns (~13:05 for flat/hilly stages, ~12:15 for mountain stages); stages 1, 16 and 21 have specifically confirmed times. Times may be refined closer to each stage.",
+  "rest_days": [
+    { "date": "2026-07-13", "location": "Cantal" },
+    { "date": "2026-07-20", "location": "Haute-Savoie" }
+  ],
+  "stages": [
+    {
+      "stage": 1,
+      "date": "2026-07-04",
+      "day": "Saturday",
+      "start": "Barcelona",
+      "finish": "Barcelona",
+      "type": "Team time trial",
+      "start_time_cest": "17:05",
+      "start_time_note": "First team off; last team 18:55"
+    },
+    {
+      "stage": 2,
+      "date": "2026-07-05",
+      "day": "Sunday",
+      "start": "Tarragona",
+      "finish": "Barcelona",
+      "type": "Hilly",
+      "start_time_cest": "13:05"
+    },
+    {
+      "stage": 3,
+      "date": "2026-07-06",
+      "day": "Monday",
+      "start": "Granollers",
+      "finish": "Les Angles",
+      "type": "Mountain",
+      "start_time_cest": "12:15"
+    },
+    {
+      "stage": 4,
+      "date": "2026-07-07",
+      "day": "Tuesday",
+      "start": "Carcassonne",
+      "finish": "Foix",
+      "type": "Hilly",
+      "start_time_cest": "13:05"
+    },
+    {
+      "stage": 5,
+      "date": "2026-07-08",
+      "day": "Wednesday",
+      "start": "Lannemezan",
+      "finish": "Pau",
+      "type": "Flat",
+      "start_time_cest": "13:05"
+    },
+    {
+      "stage": 6,
+      "date": "2026-07-09",
+      "day": "Thursday",
+      "start": "Pau",
+      "finish": "Gavarnie-Gèdre",
+      "type": "Summit finish",
+      "start_time_cest": "12:15"
+    },
+    {
+      "stage": 7,
+      "date": "2026-07-10",
+      "day": "Friday",
+      "start": "Hagetmau",
+      "finish": "Bordeaux",
+      "type": "Flat",
+      "start_time_cest": "13:05"
+    },
+    {
+      "stage": 8,
+      "date": "2026-07-11",
+      "day": "Saturday",
+      "start": "Périgueux",
+      "finish": "Bergerac",
+      "type": "Flat",
+      "start_time_cest": "13:05"
+    },
+    {
+      "stage": 9,
+      "date": "2026-07-12",
+      "day": "Sunday",
+      "start": "Malemort",
+      "finish": "Ussel",
+      "type": "Hilly",
+      "start_time_cest": "13:05"
+    },
+    {
+      "stage": 10,
+      "date": "2026-07-14",
+      "day": "Tuesday",
+      "start": "Aurillac",
+      "finish": "Le Lioran",
+      "type": "Summit finish",
+      "start_time_cest": "12:15",
+      "start_time_note": "Bastille Day"
+    },
+    {
+      "stage": 11,
+      "date": "2026-07-15",
+      "day": "Wednesday",
+      "start": "Vichy",
+      "finish": "Nevers",
+      "type": "Flat",
+      "start_time_cest": "13:05"
+    },
+    {
+      "stage": 12,
+      "date": "2026-07-16",
+      "day": "Thursday",
+      "start": "Nevers Magny-Cours",
+      "finish": "Chalon-sur-Saône",
+      "type": "Flat",
+      "start_time_cest": "13:05"
+    },
+    {
+      "stage": 13,
+      "date": "2026-07-17",
+      "day": "Friday",
+      "start": "Dole",
+      "finish": "Belfort",
+      "type": "Hilly",
+      "start_time_cest": "13:05",
+      "start_time_note": "Longest stage, 205 km"
+    },
+    {
+      "stage": 14,
+      "date": "2026-07-18",
+      "day": "Saturday",
+      "start": "Mulhouse",
+      "finish": "Le Markstein",
+      "type": "Mountain",
+      "start_time_cest": "12:15"
+    },
+    {
+      "stage": 15,
+      "date": "2026-07-19",
+      "day": "Sunday",
+      "start": "Champagnole",
+      "finish": "Plateau de Solaison",
+      "type": "Summit finish",
+      "start_time_cest": "12:15"
+    },
+    {
+      "stage": 16,
+      "date": "2026-07-21",
+      "day": "Tuesday",
+      "start": "Évian-les-Bains",
+      "finish": "Thonon-les-Bains",
+      "type": "Individual time trial",
+      "start_time_cest": "12:30",
+      "start_time_note": "First rider off; GC leaders ~17:00-17:30"
+    },
+    {
+      "stage": 17,
+      "date": "2026-07-22",
+      "day": "Wednesday",
+      "start": "Chambéry",
+      "finish": "Voiron",
+      "type": "Flat",
+      "start_time_cest": "13:05"
+    },
+    {
+      "stage": 18,
+      "date": "2026-07-23",
+      "day": "Thursday",
+      "start": "Voiron",
+      "finish": "Orcières-Merlette",
+      "type": "Summit finish",
+      "start_time_cest": "12:15"
+    },
+    {
+      "stage": 19,
+      "date": "2026-07-24",
+      "day": "Friday",
+      "start": "Gap",
+      "finish": "Alpe d'Huez",
+      "type": "Summit finish",
+      "start_time_cest": "12:15"
+    },
+    {
+      "stage": 20,
+      "date": "2026-07-25",
+      "day": "Saturday",
+      "start": "Le Bourg-d'Oisans",
+      "finish": "Alpe d'Huez",
+      "type": "Queen stage",
+      "start_time_cest": "12:15"
+    },
+    {
+      "stage": 21,
+      "date": "2026-07-26",
+      "day": "Sunday",
+      "start": "Thoiry",
+      "finish": "Paris (Champs-Élysées)",
+      "type": "Flat / finale",
+      "start_time_cest": "16:30"
+    }
+  ]
+}

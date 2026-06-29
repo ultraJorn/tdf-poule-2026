@@ -72,5 +72,8 @@ export const api = {
   // (SITE_ADMIN_SECRET on the backend) rather than each poule's own organizer passphrase.
   listAllPoules: (secret) => request(`/api/admin/poules`, { siteAdminSecret: secret }),
   deletePouleAsSiteAdmin: (code, secret) =>
-    request(`/api/admin/poules/${encodeURIComponent(code)}`, { method: "DELETE", siteAdminSecret: secret })
+    request(`/api/admin/poules/${encodeURIComponent(code)}`, { method: "DELETE", siteAdminSecret: secret }),
+
+  // Real 2026 route dates/times + whether the pre-race free-swap window is open right now.
+  getSchedule: () => request(`/api/schedule`)
 };

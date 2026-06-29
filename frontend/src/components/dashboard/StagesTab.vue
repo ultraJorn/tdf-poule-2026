@@ -6,6 +6,7 @@
         <div>
           <h2 class="display" style="margin:0; font-size:20px;">{{ t("stage_word") }} {{ detailStage.n }}</h2>
           <div style="margin-top:4px;">{{ detailStage.label }} <span class="tp-pill muted">{{ stageTagLabel(detailStage.tag) }}</span></div>
+          <div v-if="formatStageDate(detailStage.n)" class="tp-note mono" style="margin-top:4px;">{{ formatStageDate(detailStage.n) }}</div>
         </div>
         <span v-if="detailStage.locked" class="tp-pill green">{{ t("scored_pill") }}</span>
         <span v-else class="tp-pill muted">{{ t("pending_pill") }}</span>
@@ -46,6 +47,7 @@
         </div>
       </div>
       <div v-if="s.km" class="tp-note mono" style="margin-top:6px;">{{ s.km }} km &middot; {{ s.elev }} m {{ t("th_climbing").toLowerCase() }}</div>
+      <div v-if="formatStageDate(s.n)" class="tp-note mono" style="margin-top:2px;">{{ formatStageDate(s.n) }}</div>
       <div style="margin-top:8px; pointer-events:none;" v-html="profileSvgMarkup(s)"></div>
       <p v-if="note(s)" class="tp-note" style="margin-top:6px;">{{ note(s) }}</p>
     </div>
@@ -63,6 +65,18 @@ const store = usePouleStore();
 const { t, lang, stageTagLabel } = useI18n();
 
 const detailStage = ref(null);
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// Manual string formatting (no Date object) so there's zero risk of the browser's local
+// timezone shifting a midnight-UTC date back a day -- these are fixed real-world calendar
+// values from the schedule API, not something that needs re-interpreting per visitor.
+function formatStageDate(stageNumber) {
+  const s = store.scheduleByStage[stageNumber];
+  if (!s) return "";
+  const [y, m, d] = s.date.split("-").map(Number);
+  return `${s.day}, ${d} ${MONTHS[m - 1]} ${y} · ${s.startTimeCest} CEST`;
+}
 
 function note(stage) {
   if (!stage.note) return "";
