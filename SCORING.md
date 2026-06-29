@@ -45,6 +45,32 @@ rider_stage_points = finish_points (0 if outside top 15)
                     + white_bonus  (if they hold it)
 ```
 
+On the **final stage only** (stage 21), add the final GC bonus below on top
+of this.
+
+## 3b. Final GC bonus (stage 21 only, one time)
+
+Every stage has a "General classification after this stage (top 10)" field
+the organizer can fill in. For stages 1–20 this is **purely informational**
+— it shows on the Results tab so players can follow how the GC is shaping
+up, but it never scores any points. Only the GC entered for the **last
+stage** pays out, as a one-time bonus worth **10x** an equivalent stage
+finish:
+
+| GC rank | 1   | 2   | 3   | 4   | 5   | 6   | 7  | 8  | 9  | 10 |
+|---------|-----|-----|-----|-----|-----|-----|----|----|----|----| 
+| Bonus   | 250 | 200 | 160 | 140 | 120 | 100 | 80 | 70 | 60 | 50 |
+
+(`GC_FINAL_BONUS = {250, 200, 160, 140, 120, 100, 80, 70, 60, 50}` in code —
+literally `FINISH_POINTS[0..9]` x 10.) This is added on top of whatever that
+same final stage's own finish-order points and jersey bonuses already are —
+a rider who wins stage 21 outright *and* finishes top of the final GC earns
+both. The yellow jersey's stage-by-stage +8 bonus (section 2) still applies
+too, so winning the Tour outright is worth roughly the GC bonus (250) plus
+21 days of +8 yellow-jersey bonuses (~168) plus whatever stage placings that
+rider picked up along the way — the final GC is the single biggest point
+swing in the game, by design.
+
 ## 4. A team's points for one stage
 
 A player's score for a given stage is the **sum of every rider currently on
@@ -108,11 +134,16 @@ Vingegaard-inclusive one.
 - **Entering results**: Admin tab → "Enter stage result" (dropdown form or
   CSV paste) — see `frontend/src/components/dashboard/AdminStageEntry.vue`.
 - **Computing scores**: `ScoringService.computeStagePoints()` (per-stage
-  points) and `ScoringService.teamTotal()` (season total + breakdown), called
-  server-side — the frontend never computes scores itself, only displays
-  what the API returns.
+  finish/jersey points), `ScoringService.computeFinalGcBonus()` (the
+  stage-21-only GC bonus, merged into that stage's points by
+  `StageService.saveResult()`), and `ScoringService.teamTotal()` (season
+  total + breakdown) — all server-side; the frontend never computes scores
+  itself, only displays what the API returns.
 - **Changing the rules**: if you want different point values or bonus
-  amounts, edit the `FINISH_POINTS` array and `JERSEY_BONUS` map at the top
-  of `ScoringService.java` and redeploy the backend — there's no UI for
-  changing the scoring formula itself (team size/budget/swap limits are
-  configurable per poule in Admin → Settings, but point values are not).
+  amounts, edit the `FINISH_POINTS`/`GC_FINAL_BONUS` arrays and `JERSEY_BONUS`
+  map at the top of `ScoringService.java` and redeploy the backend — there's
+  no UI for changing the scoring formula itself (team size/budget/swap
+  limits are configurable per poule in Admin → Settings, but point values
+  are not). `StageService` decides which stage counts as "final" by taking
+  the highest `stage_number` that exists for that poule, not a hardcoded 21
+  — so this still works correctly if a poule's stage count ever differs.

@@ -51,7 +51,17 @@ public class StageService {
         stage.setTopRiderIds(finishOrder);
         stage.setGcRiderIds(gcOrder);
         stage.setJerseys(jerseys);
-        stage.setPointsByRider(scoringService.computeStagePoints(finishOrder, jerseys));
+
+        Map<String, Integer> points = new LinkedHashMap<>(scoringService.computeStagePoints(finishOrder, jerseys));
+        int maxStageNumber = stageRepository.findByPouleIdOrderByStageNumberAsc(id).stream()
+                .mapToInt(Stage::getStageNumber).max().orElse(stageNumber);
+        if (stageNumber == maxStageNumber) {
+            // Final stage only: the GC top 10 entered here pays out a one-time bonus on top
+            // of whatever this stage's own finish order/jerseys already earned. Every other
+            // stage's GC entry stays purely informational (Results tab), never scored.
+            scoringService.computeFinalGcBonus(gcOrder).forEach((riderId, bonus) -> points.merge(riderId, bonus, Integer::sum));
+        }
+        stage.setPointsByRider(points);
         stage.setLocked(true);
         stageRepository.save(stage);
 

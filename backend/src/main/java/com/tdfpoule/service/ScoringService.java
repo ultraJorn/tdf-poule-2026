@@ -29,6 +29,14 @@ public class ScoringService {
             "white", 3
     );
 
+    /**
+     * One-time bonus for the final general classification (top 10), awarded only on the
+     * race's last stage -- 10x the equivalent stage finish-order points. The GC top 10
+     * entered after every other stage is purely informational (shown on the Results tab)
+     * and never scores anything; only the final stage's GC entry pays out.
+     */
+    public static final int[] GC_FINAL_BONUS = {250, 200, 160, 140, 120, 100, 80, 70, 60, 50};
+
     /** What a player's roster looked like once swaps effective through {@code stageNum} are applied. */
     public List<String> rosterAtStage(List<String> baseRiders, List<SwapLogEntry> swapLog, int stageNum) {
         List<String> roster = new ArrayList<>(baseRiders);
@@ -64,6 +72,19 @@ public class ScoringService {
                 int bonus = JERSEY_BONUS.getOrDefault(e.getKey(), 0);
                 pts.merge(riderId, bonus, Integer::sum);
             }
+        }
+        return pts;
+    }
+
+    /** The one-time final-GC bonus for each rider in the top 10 -- only ever called for the
+     *  race's last stage; see {@link #GC_FINAL_BONUS}. */
+    public Map<String, Integer> computeFinalGcBonus(List<String> gcOrder) {
+        Map<String, Integer> pts = new LinkedHashMap<>();
+        if (gcOrder == null) return pts;
+        for (int i = 0; i < gcOrder.size() && i < GC_FINAL_BONUS.length; i++) {
+            String riderId = gcOrder.get(i);
+            if (riderId == null || riderId.isBlank()) continue;
+            pts.merge(riderId, GC_FINAL_BONUS[i], Integer::sum);
         }
         return pts;
     }
