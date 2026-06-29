@@ -100,18 +100,21 @@ Swaps are also bounded by the organizer's settings: a fixed `budgetCap` (the
 incoming rider's price can't push the roster's total cost over it) and a
 fixed `totalSwaps` for the whole race (not per stage).
 
-**Exception — the pre-race free-swap window.** Real-world startlists can
-still change right up to the start of stage 1 (a rider gets added, or ends
-up not actually starting), so swaps made in the 24 hours immediately before
-stage 1's real-world start are free and uncapped: they don't decrement
-`totalSwaps` at all, no matter how many you make. This is computed
-server-side (`ScheduleService.isFreeSwapWindowActive()`) against stage 1's
-actual confirmed start time from `schedule/tour_de_france_2026_schedule.json`
-(2026-07-04, 17:05 CEST), using the real **Europe/Paris** clock rather than
-the server's own timezone or any individual player's browser clock — so the
-cutoff is correct everywhere, regardless of where a player or the server
-happens to be. The window length is configurable
-(`FREE_SWAP_WINDOW_HOURS`, default 24).
+**Exception — the pre-race period.** Real-world startlists can still change
+right up to the start of stage 1 (a rider gets added, or ends up not
+actually starting), so swaps made while `poule.currentStage == 0` are free
+and uncapped: they don't decrement `totalSwaps` at all, no matter how many
+you make. The moment the organizer locks in stage 1's result, `currentStage`
+becomes 1 and the normal limited `totalSwaps` budget starts counting from
+then on — this is a state check (`TeamService.swap()`), not a clock-based
+window, so it doesn't matter exactly when during the pre-race period a swap
+happens.
+
+The app separately shows a live countdown to stage 1's real confirmed start
+(2026-07-04, 17:05 CEST, from `schedule/tour_de_france_2026_schedule.json`
+via `ScheduleService`, computed in the real **Europe/Paris** timezone) on
+the "My team" tab — that's purely informational context for players, not
+what actually gates free swaps.
 
 ## 6. Season total
 

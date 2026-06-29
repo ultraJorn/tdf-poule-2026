@@ -5,6 +5,8 @@
     <div v-if="freeSwapActive" class="tp-card" style="border-color:var(--green); background:rgba(79,185,122,0.08);">
       <strong style="color:var(--green);">{{ t("free_swap_active_title") }}</strong>
       <p class="tp-note" style="margin-top:4px;">{{ t("free_swap_active_note", { until: freeSwapUntilLabel }) }}</p>
+      <p v-if="countdownLabel" class="display" style="margin:8px 0 0; font-size:22px; color:var(--green);">{{ t("race_starts_in", { countdown: countdownLabel }) }}</p>
+      <p v-else-if="freeSwapUntilLabel" class="tp-note" style="margin-top:8px;">{{ t("race_should_be_underway") }}</p>
     </div>
     <div class="tp-card">
       <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
@@ -71,7 +73,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { usePouleStore } from "../../stores/poule";
 import { useI18n } from "../../i18n";
 
@@ -86,11 +88,35 @@ const roster = computed(() => rosterAtStage(store.poule.currentStage + 1));
 const usedBudget = computed(() => roster.value.reduce((s, id) => s + (store.ridersById[id]?.price || 0), 0));
 const swapsLeft = computed(() => store.poule.totalSwaps - (store.team.swapsUsed || 0));
 
-const freeSwapActive = computed(() => !!store.schedule?.freeSwapWindowActive);
+// Free, uncapped swaps for the whole pre-race period -- mirrors TeamService.swap()'s
+// `poule.currentStage == 0` check on the backend exactly, not tied to a specific clock time.
+const freeSwapActive = computed(() => store.poule.currentStage === 0);
 const freeSwapUntilLabel = computed(() => {
   const iso = store.schedule?.stage1Start;
   if (!iso) return "";
   return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+});
+
+// Live countdown to stage 1's real confirmed start, purely informational (the backend gate
+// is currentStage-based, not this clock) -- ticks every second while this tab is open.
+const nowMs = ref(Date.now());
+let tickHandle = null;
+onMounted(() => { tickHandle = setInterval(() => { nowMs.value = Date.now(); }, 1000); });
+onUnmounted(() => { if (tickHandle) clearInterval(tickHandle); });
+
+const countdownLabel = computed(() => {
+  const iso = store.schedule?.stage1Start;
+  if (!iso) return null;
+  const diffMs = new Date(iso).getTime() - nowMs.value;
+  if (diffMs <= 0) return null;
+  const totalSeconds = Math.floor(diffMs / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  if (days > 0) return `${days}d ${hours}h ${minutes}m`;
+  if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+  return `${minutes}m ${seconds}s`;
 });
 
 function rosterAtStage(stageNum) {

@@ -36,10 +36,6 @@ app:
   # bypassing each poule's own organizer passphrase). Leave unset to disable it entirely --
   # see SiteAdminService.
   site-admin-secret: ${SITE_ADMIN_SECRET:}
-  # How many hours before stage 1's actual confirmed start (see ScheduleService) swaps are
-  # free and uncapped -- riders can still be added/dropped from real-world startlists right
-  # up to the gun, so players shouldn't burn a limited swap reacting to that.
-  free-swap-window-hours: ${FREE_SWAP_WINDOW_HOURS:24}
 
 logging:
   level:

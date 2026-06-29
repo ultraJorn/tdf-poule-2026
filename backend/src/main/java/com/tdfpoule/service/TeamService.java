@@ -28,17 +28,14 @@ public class TeamService {
     private final StageRepository stageRepository;
     private final PouleService pouleService;
     private final ScoringService scoringService;
-    private final ScheduleService scheduleService;
 
     public TeamService(PlayerTeamRepository playerTeamRepository, RiderRepository riderRepository,
-                        StageRepository stageRepository, PouleService pouleService, ScoringService scoringService,
-                        ScheduleService scheduleService) {
+                        StageRepository stageRepository, PouleService pouleService, ScoringService scoringService) {
         this.playerTeamRepository = playerTeamRepository;
         this.riderRepository = riderRepository;
         this.stageRepository = stageRepository;
         this.pouleService = pouleService;
         this.scoringService = scoringService;
-        this.scheduleService = scheduleService;
     }
 
     public Optional<TeamDto> find(String code, String username) {
@@ -90,7 +87,11 @@ public class TeamService {
         PlayerTeam team = playerTeamRepository.findByPouleIdAndUsernameIgnoreCase(id, username)
                 .orElseThrow(() -> ApiException.notFound("No team found for " + username));
 
-        boolean freeSwap = scheduleService.isFreeSwapWindowActive();
+        // Free, uncapped swaps for the whole pre-race period -- real startlists can still
+        // change right up to the gun, so players shouldn't burn a limited swap reacting to
+        // that. The limited totalSwaps budget only starts counting once stage 1 is actually
+        // locked in by the organizer (currentStage > 0), not tied to a specific clock time.
+        boolean freeSwap = poule.getCurrentStage() == 0;
         if (!freeSwap && team.getSwapsUsed() >= poule.getTotalSwaps()) {
             throw ApiException.badRequest("No swaps left.");
         }

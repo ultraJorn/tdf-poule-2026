@@ -22,11 +22,6 @@ public class ScheduleController {
     public ScheduleInfoDto get() {
         List<ScheduleStageDto> stages = scheduleService.getStages().stream()
                 .map(ScheduleStageDto::from).collect(Collectors.toList());
-        return new ScheduleInfoDto(
-                stages,
-                scheduleService.getStage1Start(),
-                scheduleService.getFreeSwapWindowStart(),
-                scheduleService.isFreeSwapWindowActive()
-        );
+        return new ScheduleInfoDto(stages, scheduleService.getStage1Start());
     }
 }

@@ -5,8 +5,6 @@ import java.util.List;
 
 public record ScheduleInfoDto(
         List<ScheduleStageDto> stages,
-        Instant stage1Start,
-        Instant freeSwapWindowStart,
-        boolean freeSwapWindowActive
+        Instant stage1Start
 ) {
 }

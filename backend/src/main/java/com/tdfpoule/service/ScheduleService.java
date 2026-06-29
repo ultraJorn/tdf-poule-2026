@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,9 +17,11 @@ import java.util.List;
 
 /**
  * Loads schedule/tour_de_france_2026_schedule.json (confirmed/estimated 2026 route dates and
- * CEST start times) and answers "is the pre-race free-swap window open right now?" using the
- * real Europe/Paris clock -- not server-local time and not each player's browser timezone --
- * so the cutoff actually lines up with when the race starts in reality.
+ * CEST start times) so the app can show each stage's real calendar date and a countdown to
+ * stage 1, computed against the real Europe/Paris clock rather than server-local time.
+ *
+ * Free/uncapped pre-race swaps are gated on the poule's own currentStage (see
+ * TeamService.swap()), not on wall-clock time -- this service is purely informational now.
  */
 @Service
 public class ScheduleService {
@@ -36,9 +36,6 @@ public class ScheduleService {
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     record ScheduleFile(List<ScheduleStage> stages) {}
-
-    @Value("${app.free-swap-window-hours:24}")
-    private int freeSwapWindowHours;
 
     private final List<ScheduleStage> stages;
 
@@ -62,15 +59,5 @@ public class ScheduleService {
     public Instant getStage1Start() {
         ScheduleStage s1 = getStage(1);
         return ZonedDateTime.of(LocalDate.parse(s1.date()), LocalTime.parse(s1.startTimeCest()), RACE_ZONE).toInstant();
-    }
-
-    public Instant getFreeSwapWindowStart() {
-        return getStage1Start().minus(Duration.ofHours(freeSwapWindowHours));
-    }
-
-    /** True from {@code freeSwapWindowHours} before stage 1 starts, until it actually starts. */
-    public boolean isFreeSwapWindowActive() {
-        Instant now = Instant.now();
-        return !now.isBefore(getFreeSwapWindowStart()) && now.isBefore(getStage1Start());
     }
 }
