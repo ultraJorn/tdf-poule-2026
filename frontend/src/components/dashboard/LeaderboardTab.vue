@@ -3,7 +3,7 @@
     <p v-if="store.leaderboard === null" class="tp-note">{{ t("loading_leaderboard") }}</p>
     <template v-else>
       <div v-for="(row, i) in store.leaderboard" :key="row.username">
-        <div class="tp-lb-row" style="cursor:pointer;" @click="toggleTeam(row.username)">
+        <div class="tp-lb-row" :style="raceStarted ? 'cursor:pointer;' : ''" @click="raceStarted && toggleTeam(row.username)">
           <div class="tp-bibtag" :class="medalClass(i)">{{ i + 1 }}</div>
           <div class="tp-lb-bar-wrap">
             <div class="tp-lb-name">
@@ -13,7 +13,7 @@
             <div class="tp-lb-bar-bg"><div class="tp-lb-bar-fill" :style="{ width: (row.total / max) * 100 + '%' }"></div></div>
           </div>
           <div class="tp-lb-score">{{ row.total }}</div>
-          <div class="tp-pill muted" style="font-size:10px; margin-left:8px; cursor:pointer; white-space:nowrap;">
+          <div v-if="raceStarted" class="tp-pill muted" style="font-size:10px; margin-left:8px; cursor:pointer; white-space:nowrap;">
             {{ expandedUsername === row.username ? t("hide_team") : t("view_team") }}
           </div>
         </div>
@@ -39,6 +39,7 @@
         </div>
       </div>
       <p v-if="!store.leaderboard.length" class="tp-note">{{ t("no_teams_yet") }}</p>
+      <p v-if="!raceStarted && store.leaderboard.length" class="tp-note" style="margin-top:14px; text-align:center;">{{ t("teams_hidden_pre_race") }}</p>
     </template>
   </div>
 </template>
@@ -53,6 +54,7 @@ const store = usePouleStore();
 const { t, tagLabel } = useI18n();
 
 const max = computed(() => Math.max(1, ...(store.leaderboard || []).map((r) => r.total)));
+const raceStarted = computed(() => store.poule.currentStage > 0);
 
 const expandedUsername = ref(null);
 const expandedTeam = ref(null);

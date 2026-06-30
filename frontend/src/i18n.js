@@ -173,6 +173,7 @@ export const I18N = {
     lb_team_heading: "{username}'s team",
     lb_loading_team: "Loading…",
     lb_no_team: "No team yet.",
+    teams_hidden_pre_race: "Team rosters are hidden until stage 1 is underway — no peeking before the race!",
     // Admin participants
     admin_sec_participants: "Participants",
     participants_title: "Participants",
@@ -346,6 +347,7 @@ export const I18N = {
     lb_team_heading: "Team van {username}",
     lb_loading_team: "Laden…",
     lb_no_team: "Nog geen team.",
+    teams_hidden_pre_race: "Teams zijn verborgen totdat etappe 1 van start gaat — geen spieken voor de koers!",
     admin_sec_participants: "Deelnemers",
     participants_title: "Deelnemers",
     participants_note: "Verwijder een deelnemer om hun plek vrij te maken. Het team, de punten en de wisselgeschiedenis worden definitief gewist.",
