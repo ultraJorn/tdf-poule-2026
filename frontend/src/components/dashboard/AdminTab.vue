@@ -16,6 +16,7 @@
     </div>
     <AdminStageEntry v-if="section === 'stage'" />
     <AdminRiders v-else-if="section === 'riders'" />
+    <AdminParticipants v-else-if="section === 'participants'" />
     <AdminSettings v-else-if="section === 'settings'" />
   </template>
 </template>
@@ -26,6 +27,7 @@ import { usePouleStore } from "../../stores/poule";
 import { useI18n } from "../../i18n";
 import AdminStageEntry from "./AdminStageEntry.vue";
 import AdminRiders from "./AdminRiders.vue";
+import AdminParticipants from "./AdminParticipants.vue";
 import AdminSettings from "./AdminSettings.vue";
 
 const store = usePouleStore();
@@ -38,6 +40,7 @@ const section = ref("stage");
 const sections = computed(() => [
   { key: "stage", label: t("admin_sec_stage") },
   { key: "riders", label: t("admin_sec_riders") },
+  { key: "participants", label: t("admin_sec_participants") },
   { key: "settings", label: t("admin_sec_settings") }
 ]);
 

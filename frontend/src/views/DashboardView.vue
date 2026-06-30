@@ -39,6 +39,7 @@
     <LeaderboardTab v-else-if="tab === 'leaderboard'" />
     <StagesTab v-else-if="tab === 'stages'" />
     <ResultsTab v-else-if="tab === 'results'" />
+    <RulesTab v-else-if="tab === 'rules'" />
     <AdminTab v-else-if="tab === 'admin'" />
   </div>
 </template>
@@ -53,6 +54,7 @@ import MyTeamTab from "../components/dashboard/MyTeamTab.vue";
 import LeaderboardTab from "../components/dashboard/LeaderboardTab.vue";
 import StagesTab from "../components/dashboard/StagesTab.vue";
 import ResultsTab from "../components/dashboard/ResultsTab.vue";
+import RulesTab from "../components/dashboard/RulesTab.vue";
 import AdminTab from "../components/dashboard/AdminTab.vue";
 
 const store = usePouleStore();
@@ -67,6 +69,7 @@ const tabs = computed(() => [
   { key: "leaderboard", label: t("tab_leaderboard") },
   { key: "stages", label: t("tab_stages") },
   { key: "results", label: t("tab_results") },
+  { key: "rules", label: t("tab_rules") },
   { key: "admin", label: t("tab_admin") }
 ]);
 

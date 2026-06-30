@@ -56,6 +56,8 @@ export const api = {
     request(`/api/poules/${encodeURIComponent(code)}/teams`, { method: "POST", body: payload }),
   swap: (code, username, payload) =>
     request(`/api/poules/${encodeURIComponent(code)}/teams/${encodeURIComponent(username)}/swap`, { method: "POST", body: payload }),
+  deleteTeam: (code, username, adminPassword) =>
+    request(`/api/poules/${encodeURIComponent(code)}/teams/${encodeURIComponent(username)}`, { method: "DELETE", adminPassword }),
   leaderboard: (code) => request(`/api/poules/${encodeURIComponent(code)}/leaderboard`),
 
   saveStageResult: (code, stageNumber, adminPassword, payload) =>

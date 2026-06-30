@@ -241,6 +241,13 @@ export const usePouleStore = defineStore("poule", {
       return bundle;
     },
 
+    async deleteParticipant(username) {
+      await api.deleteTeam(this.code, username, this.adminPassword);
+      if (this.leaderboard) {
+        this.leaderboard = this.leaderboard.filter((r) => r.username.toLowerCase() !== username.toLowerCase());
+      }
+    },
+
     async deletePoule() {
       await api.deletePoule(this.code, this.adminPassword);
       const code = this.code;

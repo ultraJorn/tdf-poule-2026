@@ -125,6 +125,15 @@ public class TeamService {
         return toDto(id, team);
     }
 
+    @Transactional
+    public void delete(String code, String username, String adminPassword) {
+        String id = pouleService.normalizeCode(code);
+        pouleService.assertAdmin(id, adminPassword);
+        PlayerTeam team = playerTeamRepository.findByPouleIdAndUsernameIgnoreCase(id, username)
+                .orElseThrow(() -> ApiException.notFound("No team found for " + username));
+        playerTeamRepository.delete(team);
+    }
+
     public List<LeaderboardRowDto> leaderboard(String code) {
         String id = pouleService.normalizeCode(code);
         pouleService.getOrThrow(id);
