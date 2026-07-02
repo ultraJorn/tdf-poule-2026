@@ -111,7 +111,10 @@ public class TeamService {
 
         int usedExcludingOut = currentRoster.stream()
                 .filter(rid -> !rid.equals(req.outId()))
-                .mapToInt(rid -> riderMap.get(rid).getPrice())
+                .mapToInt(rid -> {
+                    Rider r = riderMap.get(rid);
+                    return r != null ? r.getPrice() : 0;
+                })
                 .sum();
         if (usedExcludingOut + incoming.getPrice() > poule.getBudgetCap()) {
             throw ApiException.badRequest("That swap would go over the budget cap of " + poule.getBudgetCap() + ".");
