@@ -2,12 +2,16 @@
   <div v-if="error" class="tp-error">{{ error }}</div>
   <div v-if="!store.team"><p class="tp-note">No team found.</p></div>
   <template v-else>
+
+    <!-- ── FREE SWAP BANNER ─────────────────────────────────── -->
     <div v-if="freeSwapActive" class="tp-card" style="border-color:var(--green); background:rgba(79,185,122,0.08);">
       <strong style="color:var(--green);">{{ t("free_swap_active_title") }}</strong>
       <p class="tp-note" style="margin-top:4px;">{{ t("free_swap_active_note", { until: freeSwapUntilLabel }) }}</p>
       <p v-if="countdownLabel" class="display" style="margin:8px 0 0; font-size:22px; color:var(--green);">{{ t("race_starts_in", { countdown: countdownLabel }) }}</p>
       <p v-else-if="freeSwapUntilLabel" class="tp-note" style="margin-top:8px;">{{ t("race_should_be_underway") }}</p>
     </div>
+
+    <!-- ── STATS BAR ────────────────────────────────────────── -->
     <div class="tp-card">
       <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
         <div><div class="tp-note">{{ t("total_points") }}</div><div class="display" style="font-size:30px;">{{ store.team.total.total }}</div></div>
@@ -22,53 +26,112 @@
       </div>
     </div>
 
-    <div v-if="swapOutId" class="tp-card" style="border-color:var(--yellow);">
-      <h3 style="margin-top:0;">{{ t("swap_out_title", { name: store.ridersById[swapOutId]?.name || "" }) }}</h3>
-      <p class="tp-note" v-html="t('swap_room_note', { room: `<strong>${room}</strong>` })"></p>
-      <div class="tp-field">
-        <select class="tp-select" v-model="swapInId">
-          <option v-if="!candidates.length" value="">{{ t("no_riders_fit") }}</option>
-          <option v-for="c in candidates" :key="c.id" :value="c.id">{{ c.name }} ({{ c.team }}) &mdash; {{ c.price }}</option>
-        </select>
-      </div>
-      <div class="tp-row">
-        <button class="tp-btn" :disabled="!candidates.length" @click="confirmSwap">{{ t("btn_confirm_swap") }}</button>
-        <button class="tp-btn secondary" @click="swapOutId = null">{{ t("btn_cancel") }}</button>
-      </div>
-    </div>
+    <!-- ══════════════════════════════════════════════════════
+         SWAP PICKER — shown instead of roster while swapping
+    ══════════════════════════════════════════════════════ -->
+    <template v-if="swapOutId">
 
-    <div class="tp-card">
-      <h3 style="margin-top:0;">{{ t("current_roster") }}</h3>
-      <div class="tp-rider-grid">
-        <div v-for="id in roster" :key="id" class="tp-rider-card" style="cursor:default;">
+      <!-- outgoing rider banner -->
+      <div class="tp-card" style="border-color:var(--yellow); background:rgba(245,211,0,0.06);">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
           <div>
-            <div class="tp-rider-name">
-              {{ store.ridersById[id]?.name }}
-              <span v-if="store.ridersById[id]?.active === false" class="tp-pill muted">DNF</span>
+            <div class="tp-note" style="margin-bottom:3px;">{{ t("swap_out_title", { name: "" }) }}</div>
+            <div class="tp-rider-name" style="font-size:17px;">{{ store.ridersById[swapOutId]?.name }}</div>
+            <div class="tp-rider-meta">
+              {{ store.ridersById[swapOutId]?.team }} &middot;
+              {{ tagLabel(store.ridersById[swapOutId]?.tag) }} &middot;
+              {{ store.ridersById[swapOutId]?.price }}
             </div>
-            <div class="tp-rider-meta">{{ store.ridersById[id]?.team }} &middot; {{ tagLabel(store.ridersById[id]?.tag) }}</div>
           </div>
-          <div class="tp-rider-price">{{ store.ridersById[id]?.price }}</div>
-          <button class="tp-btn secondary small" style="margin-left:8px;" :disabled="swapsLeft <= 0 && !freeSwapActive" @click="swapOutId = id">{{ t("btn_swap") }}</button>
+          <button class="tp-btn secondary small" @click="cancelSwap">{{ t("btn_cancel") }}</button>
         </div>
       </div>
-      <p class="tp-note">{{ t("swap_note") }}</p>
-    </div>
 
-    <div class="tp-card">
-      <h3 style="margin-top:0;">{{ t("stage_by_stage") }}</h3>
-      <div v-if="store.team.total.breakdown.length" class="tp-scroll">
-        <table class="tp-table">
-          <tr><th>{{ t("th_hash") }}</th><th>{{ t("th_stage") }}</th><th>{{ t("th_points") }}</th></tr>
-          <tr v-for="b in store.team.total.breakdown" :key="b.stage">
-            <td>{{ t("stage_word") }} {{ b.stage }}</td>
-            <td>{{ store.poule.stages[b.stage - 1].label }}</td>
-            <td class="mono">{{ b.points }}</td>
-          </tr>
-        </table>
+      <!-- budget room bar -->
+      <div class="tp-budget-bar">
+        <div style="display:flex; justify-content:space-between; font-size:13px;">
+          <span v-html="t('swap_room_note', { room: `<strong>${room}</strong>` })"></span>
+        </div>
+        <div class="tp-budget-meter">
+          <div class="tp-budget-fill" :style="{ width: Math.min(100, ((store.poule.budgetCap - room) / store.poule.budgetCap) * 100) + '%' }"></div>
+        </div>
       </div>
-      <p v-else class="tp-note">{{ t("no_stages_scored") }}</p>
-    </div>
+
+      <!-- search + tag filters -->
+      <div class="tp-filters">
+        <input class="tp-input" style="max-width:220px;" :placeholder="t('search_ph')" v-model="swapFilter">
+        <button v-for="tg in tags" :key="tg" class="tp-chip" :class="{ active: swapTag === tg }" @click="swapTag = tg">
+          {{ tagLabel(tg) }}
+        </button>
+      </div>
+
+      <!-- rider grid -->
+      <div class="tp-rider-grid">
+        <div v-for="r in swapCandidatesFiltered" :key="r.id"
+             class="tp-rider-card"
+             :class="{ selected: swapInId === r.id, disabled: r.price > room }"
+             @click="r.price <= room && toggleSwapIn(r.id)">
+          <div style="flex:1; min-width:0;">
+            <div class="tp-rider-name">{{ r.name }}</div>
+            <div class="tp-rider-meta">{{ r.team }} &middot; {{ tagLabel(r.tag) }}</div>
+          </div>
+          <div class="tp-rider-price">{{ r.price }}</div>
+        </div>
+        <p v-if="!swapCandidatesFiltered.length" class="tp-note">{{ t("no_riders_match") }}</p>
+      </div>
+
+      <!-- sticky confirm -->
+      <div v-if="swapInId" style="position:sticky; bottom:0; background:var(--bg); padding:12px 0 4px;">
+        <button class="tp-btn" style="width:100%;" @click="confirmSwap">
+          {{ t("btn_confirm_swap") }}: {{ store.ridersById[swapInId]?.name }}
+        </button>
+      </div>
+
+    </template>
+
+    <!-- ══════════════════════════════════════════════════════
+         NORMAL VIEW: current roster + stage breakdown
+    ══════════════════════════════════════════════════════ -->
+    <template v-else>
+
+      <div class="tp-card">
+        <h3 style="margin-top:0;">{{ t("current_roster") }}</h3>
+        <div class="tp-rider-grid">
+          <div v-for="id in roster" :key="id" class="tp-rider-card" style="cursor:default;">
+            <div style="flex:1; min-width:0;">
+              <div class="tp-rider-name">
+                {{ store.ridersById[id]?.name }}
+                <span v-if="store.ridersById[id]?.active === false" class="tp-pill muted">DNF</span>
+              </div>
+              <div class="tp-rider-meta">{{ store.ridersById[id]?.team }} &middot; {{ tagLabel(store.ridersById[id]?.tag) }}</div>
+            </div>
+            <div class="tp-rider-price">{{ store.ridersById[id]?.price }}</div>
+            <button class="tp-btn secondary small" style="margin-left:8px;"
+                    :disabled="swapsLeft <= 0 && !freeSwapActive"
+                    @click="startSwap(id)">
+              {{ t("btn_swap") }}
+            </button>
+          </div>
+        </div>
+        <p class="tp-note">{{ t("swap_note") }}</p>
+      </div>
+
+      <div class="tp-card">
+        <h3 style="margin-top:0;">{{ t("stage_by_stage") }}</h3>
+        <div v-if="store.team.total.breakdown.length" class="tp-scroll">
+          <table class="tp-table">
+            <tr><th>{{ t("th_hash") }}</th><th>{{ t("th_stage") }}</th><th>{{ t("th_points") }}</th></tr>
+            <tr v-for="b in store.team.total.breakdown" :key="b.stage">
+              <td>{{ t("stage_word") }} {{ b.stage }}</td>
+              <td>{{ store.poule.stages[b.stage - 1].label }}</td>
+              <td class="mono">{{ b.points }}</td>
+            </tr>
+          </table>
+        </div>
+        <p v-else class="tp-note">{{ t("no_stages_scored") }}</p>
+      </div>
+
+    </template>
   </template>
 </template>
 
@@ -80,44 +143,18 @@ import { useI18n } from "../../i18n";
 const store = usePouleStore();
 const { t, tagLabel } = useI18n();
 
-const swapOutId = ref(null);
-const swapInId = ref("");
-const error = ref(null);
+const swapOutId   = ref(null);
+const swapInId    = ref("");
+const swapFilter  = ref("");
+const swapTag     = ref("All");
+const error       = ref(null);
 
+const tags = ["All", "GC", "Sprint", "Classics", "Climber", "Domestique"];
+
+// ── roster helpers ──────────────────────────────────────────
 const roster = computed(() => rosterAtStage(store.poule.currentStage + 1));
 const usedBudget = computed(() => roster.value.reduce((s, id) => s + (store.ridersById[id]?.price || 0), 0));
-const swapsLeft = computed(() => store.poule.totalSwaps - (store.team.swapsUsed || 0));
-
-// Free, uncapped swaps for the whole pre-race period -- mirrors TeamService.swap()'s
-// `poule.currentStage == 0` check on the backend exactly, not tied to a specific clock time.
-const freeSwapActive = computed(() => store.poule.currentStage === 0);
-const freeSwapUntilLabel = computed(() => {
-  const iso = store.schedule?.stage1Start;
-  if (!iso) return "";
-  return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
-});
-
-// Live countdown to stage 1's real confirmed start, purely informational (the backend gate
-// is currentStage-based, not this clock) -- ticks every second while this tab is open.
-const nowMs = ref(Date.now());
-let tickHandle = null;
-onMounted(() => { tickHandle = setInterval(() => { nowMs.value = Date.now(); }, 1000); });
-onUnmounted(() => { if (tickHandle) clearInterval(tickHandle); });
-
-const countdownLabel = computed(() => {
-  const iso = store.schedule?.stage1Start;
-  if (!iso) return null;
-  const diffMs = new Date(iso).getTime() - nowMs.value;
-  if (diffMs <= 0) return null;
-  const totalSeconds = Math.floor(diffMs / 1000);
-  const days = Math.floor(totalSeconds / 86400);
-  const hours = Math.floor((totalSeconds % 86400) / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  if (days > 0) return `${days}d ${hours}h ${minutes}m`;
-  if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
-  return `${minutes}m ${seconds}s`;
-});
+const swapsLeft  = computed(() => store.poule.totalSwaps - (store.team.swapsUsed || 0));
 
 function rosterAtStage(stageNum) {
   let r = store.team.riderIds.slice();
@@ -131,26 +168,83 @@ function rosterAtStage(stageNum) {
   return r;
 }
 
+// ── free-swap banner + countdown ───────────────────────────
+const freeSwapActive = computed(() => store.poule.currentStage === 0);
+const freeSwapUntilLabel = computed(() => {
+  const iso = store.schedule?.stage1Start;
+  if (!iso) return "";
+  return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+});
+
+const nowMs = ref(Date.now());
+let tickHandle = null;
+onMounted(() => { tickHandle = setInterval(() => { nowMs.value = Date.now(); }, 1000); });
+onUnmounted(() => { if (tickHandle) clearInterval(tickHandle); });
+
+const countdownLabel = computed(() => {
+  const iso = store.schedule?.stage1Start;
+  if (!iso) return null;
+  const diffMs = new Date(iso).getTime() - nowMs.value;
+  if (diffMs <= 0) return null;
+  const totalSeconds = Math.floor(diffMs / 1000);
+  const days    = Math.floor(totalSeconds / 86400);
+  const hours   = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  if (days > 0)  return `${days}d ${hours}h ${minutes}m`;
+  if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+  return `${minutes}m ${seconds}s`;
+});
+
+// ── swap picker ─────────────────────────────────────────────
+// Budget room: how much we can spend on the incoming rider
 const room = computed(() => {
-  const usedExcl = roster.value.filter((id) => id !== swapOutId.value).reduce((s, id) => s + (store.ridersById[id]?.price || 0), 0);
+  const usedExcl = roster.value
+    .filter((id) => id !== swapOutId.value)
+    .reduce((s, id) => s + (store.ridersById[id]?.price || 0), 0);
   return store.poule.budgetCap - usedExcl;
 });
 
-const candidates = computed(() => {
-  return store.riders
+// All active riders not currently on the roster, sorted by price desc
+const swapCandidatesAll = computed(() =>
+  store.riders
     .filter((r) => r.active !== false)
     .filter((r) => !roster.value.includes(r.id))
-    .filter((r) => r.price <= room.value)
-    .sort((a, b) => b.price - a.price || a.name.localeCompare(b.name));
+    .sort((a, b) => b.price - a.price || a.name.localeCompare(b.name))
+);
+
+// Filtered by current search text + tag chip
+const swapCandidatesFiltered = computed(() => {
+  const ft = swapFilter.value.toLowerCase();
+  return swapCandidatesAll.value
+    .filter((r) => swapTag.value === "All" || r.tag === swapTag.value)
+    .filter((r) => !ft || r.name.toLowerCase().includes(ft) || r.team.toLowerCase().includes(ft));
 });
+
+function startSwap(id) {
+  swapOutId.value  = id;
+  swapInId.value   = "";
+  swapFilter.value = "";
+  swapTag.value    = "All";
+}
+
+function toggleSwapIn(id) {
+  swapInId.value = swapInId.value === id ? "" : id;
+}
+
+function cancelSwap() {
+  swapOutId.value  = null;
+  swapInId.value   = "";
+  swapFilter.value = "";
+  swapTag.value    = "All";
+}
 
 async function confirmSwap() {
   if (!swapInId.value) return;
   error.value = null;
   try {
     await store.swap(swapOutId.value, swapInId.value);
-    swapOutId.value = null;
-    swapInId.value = "";
+    cancelSwap();
   } catch (e) {
     error.value = e.message;
   }
