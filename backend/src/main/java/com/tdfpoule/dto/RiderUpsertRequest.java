@@ -7,6 +7,7 @@ public record RiderUpsertRequest(
         @NotBlank String team,
         int price,
         @NotBlank String tag,
-        Boolean active
+        Boolean active,
+        String nat
 ) {
 }

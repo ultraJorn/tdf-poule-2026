@@ -33,7 +33,7 @@
            @click="toggle(r)">
         <input type="checkbox" class="tp-checkbox" :checked="selected.includes(r.id)" :disabled="isDisabled(r)" tabindex="-1">
         <div>
-          <div class="tp-rider-name">{{ r.name }}</div>
+          <div class="tp-rider-name">{{ natToFlag(r.nat) }} {{ r.name }}</div>
           <div class="tp-rider-meta">{{ r.team }} &middot; {{ tagLabel(r.tag) }}</div>
         </div>
         <div class="tp-rider-price">{{ r.price }}</div>
@@ -58,7 +58,7 @@ import LangToggle from "../components/LangToggle.vue";
 
 const store = usePouleStore();
 const router = useRouter();
-const { t, tagLabel } = useI18n();
+const { t, tagLabel, natToFlag } = useI18n();
 
 onMounted(() => {
   if (store.team) router.replace(`/poule/${store.code}`);

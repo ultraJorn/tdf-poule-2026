@@ -36,7 +36,7 @@
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
           <div>
             <div class="tp-note" style="margin-bottom:3px;">{{ t("swap_out_title", { name: "" }) }}</div>
-            <div class="tp-rider-name" style="font-size:17px;">{{ store.ridersById[swapOutId]?.name }}</div>
+            <div class="tp-rider-name" style="font-size:17px;">{{ natToFlag(store.ridersById[swapOutId]?.nat) }} {{ store.ridersById[swapOutId]?.name }}</div>
             <div class="tp-rider-meta">
               {{ store.ridersById[swapOutId]?.team }} &middot;
               {{ tagLabel(store.ridersById[swapOutId]?.tag) }} &middot;
@@ -72,7 +72,7 @@
              :class="{ selected: swapInId === r.id, disabled: r.price > room }"
              @click="r.price <= room && toggleSwapIn(r.id)">
           <div style="flex:1; min-width:0;">
-            <div class="tp-rider-name">{{ r.name }}</div>
+            <div class="tp-rider-name">{{ natToFlag(r.nat) }} {{ r.name }}</div>
             <div class="tp-rider-meta">{{ r.team }} &middot; {{ tagLabel(r.tag) }}</div>
           </div>
           <div class="tp-rider-price">{{ r.price }}</div>
@@ -100,7 +100,7 @@
           <div v-for="id in roster" :key="id" class="tp-rider-card" style="cursor:default;">
             <div style="flex:1; min-width:0;">
               <div class="tp-rider-name">
-                {{ store.ridersById[id]?.name }}
+                {{ natToFlag(store.ridersById[id]?.nat) }} {{ store.ridersById[id]?.name }}
                 <span v-if="store.ridersById[id]?.active === false" class="tp-pill muted">DNF</span>
               </div>
               <div class="tp-rider-meta">{{ store.ridersById[id]?.team }} &middot; {{ tagLabel(store.ridersById[id]?.tag) }}</div>
@@ -141,7 +141,7 @@ import { usePouleStore } from "../../stores/poule";
 import { useI18n } from "../../i18n";
 
 const store = usePouleStore();
-const { t, tagLabel } = useI18n();
+const { t, tagLabel, natToFlag } = useI18n();
 
 const swapOutId   = ref(null);
 const swapInId    = ref("");

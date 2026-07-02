@@ -374,6 +374,12 @@ export function ordinalFor(lang, n) {
 }
 
 export function tagLabelFor(lang, tag) { return translate(lang, TAG_KEY_MAP[tag] || tag); }
+
+/** Convert a 2-letter ISO country code to its Unicode flag emoji (e.g. "BE" → "🇧🇪"). */
+export function natToFlag(code) {
+  if (!code || code.length !== 2) return "";
+  return code.toUpperCase().replace(/./g, c => String.fromCodePoint(c.charCodeAt(0) + 127397));
+}
 export function stageTagLabelFor(lang, tag) { return translate(lang, STAGE_TAG_KEY_MAP[tag] || tag); }
 export function jerseyLabelFor(lang, jersey) { return translate(lang, `jersey_${jersey}`); }
 
@@ -387,6 +393,7 @@ export function useI18n() {
     ordinal: (n) => ordinalFor(lang.value, n),
     tagLabel: (tag) => tagLabelFor(lang.value, tag),
     stageTagLabel: (tag) => stageTagLabelFor(lang.value, tag),
-    jerseyLabel: (jersey) => jerseyLabelFor(lang.value, jersey)
+    jerseyLabel: (jersey) => jerseyLabelFor(lang.value, jersey),
+    natToFlag
   };
 }

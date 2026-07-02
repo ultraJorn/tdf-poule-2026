@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Rider {
 
     @Id
-    @Column(length = 40)
+    @Column(length = 60)
     private String id;
 
     @Column(name = "poule_id", nullable = false, length = 8)
@@ -27,6 +27,9 @@ public class Rider {
 
     @Column(nullable = false)
     private boolean active = true;
+
+    @Column(length = 2)
+    private String nat;
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
@@ -48,4 +51,7 @@ public class Rider {
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+
+    public String getNat() { return nat; }
+    public void setNat(String nat) { this.nat = nat; }
 }

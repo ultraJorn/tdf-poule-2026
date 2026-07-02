@@ -87,5 +87,6 @@ public class RiderService {
         r.setPrice(req.price());
         r.setTag(req.tag().trim());
         r.setActive(req.active() == null || req.active());
+        r.setNat(req.nat() != null ? req.nat().toUpperCase().trim() : null);
     }
 }

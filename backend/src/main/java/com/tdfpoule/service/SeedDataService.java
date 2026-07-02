@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class SeedDataService {
 
-    public record SeedRider(String name, String team, int price, String tag) {}
+    public record SeedRider(String name, String team, int price, String tag, String nat) {}
 
     public record SeedStage(int number, String label, String tag, Integer km, Integer elev,
                              String noteEn, String noteNl, List<String> favorites) {}

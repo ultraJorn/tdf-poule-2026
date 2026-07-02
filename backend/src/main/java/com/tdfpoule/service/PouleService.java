@@ -68,6 +68,7 @@ public class PouleService {
             r.setTeam(sr.team());
             r.setPrice(sr.price());
             r.setTag(sr.tag());
+            r.setNat(sr.nat());
             r.setActive(true);
             riders.add(r);
         }

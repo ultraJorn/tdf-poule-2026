@@ -27,7 +27,7 @@
               <div v-for="id in currentRoster(expandedTeam)" :key="id" class="tp-rider-card" style="cursor:default;">
                 <div>
                   <div class="tp-rider-name">
-                    {{ store.ridersById[id]?.name }}
+                    {{ natToFlag(store.ridersById[id]?.nat) }} {{ store.ridersById[id]?.name }}
                     <span v-if="store.ridersById[id]?.active === false" class="tp-pill muted">DNF</span>
                   </div>
                   <div class="tp-rider-meta">{{ store.ridersById[id]?.team }} &middot; {{ tagLabel(store.ridersById[id]?.tag) }}</div>
@@ -51,7 +51,7 @@ import { useI18n } from "../../i18n";
 import { api } from "../../api";
 
 const store = usePouleStore();
-const { t, tagLabel } = useI18n();
+const { t, tagLabel, natToFlag } = useI18n();
 
 const max = computed(() => Math.max(1, ...(store.leaderboard || []).map((r) => r.total)));
 const raceStarted = computed(() => store.poule.currentStage > 0);
